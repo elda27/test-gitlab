@@ -1,0 +1,76 @@
+version: "3"
+services:
+  gitlab:
+    # image: gitlab/gitlab-ce
+    build: ./gitlab
+    restart: always
+    expose:
+      - 8080
+    environment:
+      # GITLAB_POST_RECONFIGURE_SCRIPT: 
+    volumes:
+      # See: https://docs.gitlab.com/ee/install/docker.html#set-up-the-volumes-location
+      # - gitlab-data:/var/opt/gitlab
+      # - gitlab-logs:/var/log/gitlab
+      # - gitlab-config:/etc/gitlab
+      # - gitlab-db:/var/lib/postgresql
+      
+      # Setup relative url
+      # See: https://docs.gitlab.com/ee/install/relative_url.html
+      # - ./gitlab/gitlab.rb:/etc/gitlab/gitlab.rb
+      # - ./gitlab/relative_url.rb:/var/opt/gitlab/gitlab-rails/etc/relative_url.rb
+      # - ./gitlab/gitlab.yml:/var/opt/gitlab/gitlab-rails/etc/gitlab.yml # Copy on Dockerfile
+      # - ./gitlab/puma.rb:/var/opt/gitlab/gitlab-rails/etc/puma.yml
+      # - ./gitlab/config.yml:/var/opt/gitlab/gitlab-shell/config.yml # Copy on Dockerfile
+      # Unix socket
+      - gitlab-sock:/var/opt/gitlab/gitlab-workhorse
+    networks:
+      - local
+
+  nginx:
+    # image: nginx:1.21
+    build: ./nginx
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/index.html:/opt/app/index.html
+      - gitlab-sock:/var/opt/gitlab/gitlab-workhorse
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - local
+    # depends_on:
+    #   - gitlab
+
+volumes:
+  gitlab-sock:
+    driver: local
+#   gitlab-data:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ./data/gitlab/data
+#       o: bind
+#   gitlab-logs:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ./data/gitlab/logs
+#       o: bind
+#   gitlab-config:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ./data/gitlab/config
+#       o: bind
+#   gitlab-db:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ./data/gitlab/db
+#       o: bind
+
+networks:
+  local:
+    driver: bridge
