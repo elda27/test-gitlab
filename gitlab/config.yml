@@ -8,7 +8,7 @@ user: git
 # Url to gitlab instance. Used for api calls. May but need not end with a slash.
 gitlab_url: "http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket"
 
-gitlab_relative_url_root: /git
+gitlab_relative_path: /git
 
 http_settings:
 
