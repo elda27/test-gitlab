@@ -6,8 +6,8 @@ services:
     restart: always
     expose:
       - 8080
-    environment:
-      GITLAB_POST_RECONFIGURE_SCRIPT: /opt/reconfigure/reconfigure.sh
+    # environment:
+    #   GITLAB_POST_RECONFIGURE_SCRIPT: /opt/reconfigure/reconfigure.sh
     volumes:
       # See: https://docs.gitlab.com/ee/install/docker.html#set-up-the-volumes-location
       # - gitlab-data:/var/opt/gitlab
@@ -17,13 +17,13 @@ services:
       
       # Setup relative url
       # See: https://docs.gitlab.com/ee/install/relative_url.html
-      # - ./gitlab/gitlab.rb:/etc/gitlab/gitlab.rb
+      - ./gitlab/gitlab.rb:/etc/gitlab/gitlab.rb
       # - ./gitlab/relative_url.rb:/var/opt/gitlab/gitlab-rails/etc/relative_url.rb
       # - ./gitlab/gitlab.yml:/var/opt/gitlab/gitlab-rails/etc/gitlab.yml # Copy on Dockerfile
       # - ./gitlab/puma.rb:/var/opt/gitlab/gitlab-rails/etc/puma.yml
       # - ./gitlab/config.yml:/var/opt/gitlab/gitlab-shell/config.yml # Copy on Dockerfile
       # - ./gitlab/gitlab-workhorse:/opt/gitlab/sv/gitlab-workhorse/run:Z
-      - ./gitlab:/opt/reconfigure
+      # - ./gitlab:/opt/reconfigure
       # Unix socket
       - gitlab-sock:/var/opt/gitlab/gitlab-workhorse
     networks:

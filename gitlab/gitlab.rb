@@ -1,5 +1,5 @@
 # See: https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server
-# external_url "http://localhost/"
+external_url "http://localhost/git"
 
 # NGINX config
 nginx['enable'] = false
